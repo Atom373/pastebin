@@ -1,0 +1,14 @@
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA4IAJDE2FPQZ3TN2A
+      secret-key: 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
+    region:
+      static: eu-north-1
+    stack:
+      auto: false
+      
+application:
+  bucket:
+    name: pastebin44
+      
