@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Pastebin</title>
+</head>
+<body>
+	<h3>Create an account</h3>
+	<form method="POST" th:action="@{/register}" id="registerForm">
+		<label>Username: <input type="text" name="username"></label><br/>
+		<label>email: <input type="email" name="email"></label><br/>
+		<label>password: <input type="password" name="password"></label><br/>
+		<input type="submit" value="register">
+	</form>
+</body>
+</html>

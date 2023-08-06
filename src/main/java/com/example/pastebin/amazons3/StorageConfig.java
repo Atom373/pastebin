@@ -1,4 +1,4 @@
-package com.example.pastebin.configs;
+package com.example.pastebin.amazons3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ public class StorageConfig {
 	private String region;
 	
 	@Bean
-	private AmazonS3 createS3Client() {
+	public AmazonS3 createS3Client() {
 		return AmazonS3ClientBuilder
 					.standard()
 					.withCredentials(

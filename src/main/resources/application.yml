@@ -1,8 +1,8 @@
 cloud:
   aws:
     credentials:
-      access-key: AKIA4IAJDE2FPQZ3TN2A
-      secret-key: 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
+      access-key: AKIA4IAJDE2FCNVJR4I2
+      secret-key: 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
     region:
       static: eu-north-1
     stack:
@@ -12,3 +12,19 @@ application:
   bucket:
     name: pastebin44
       
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pastebin
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
