@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Pastebin</title>
 </head>
 <body>
-	<h2>Welcome to pastebin!</h2>
+	<h2>Welcome to pastebin, <span sec:authentication="principal.username">Username</span>!</h2>
+	<form method="post" th:action="@{/create}">
+		<textarea placeholder="Create text block" name="text" cols="40" rows="10"></textarea>
+		<br>
+		<label>Select object lifetime
+			<select name="lifetime">
+				<option value="10">10 mins</option>
+				<option value="30">30 mins</option>
+				<option value="60">1 hour</option>
+				<option value="240">4 hours</option>
+			</select>
+		</label>
+		<br>
+		<input type="submit" value="create">		
+	</form>
 </body>
 </html>

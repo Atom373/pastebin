@@ -11,8 +11,9 @@ public class AmazonS3ClientService {
 	private AmazonS3 s3Client;
 	private StorageConfig config;
 	
-	public AmazonS3ClientService(AmazonS3 s3Client) {
+	public AmazonS3ClientService(AmazonS3 s3Client, StorageConfig config) {
 		this.s3Client = s3Client;
+		this.config = config;
 	}
 	
 	public void putObject(String objectName, String text) {
