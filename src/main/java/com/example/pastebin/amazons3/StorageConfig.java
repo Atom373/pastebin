@@ -10,6 +10,9 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
+import lombok.Data;
+
+@Data
 @Configuration
 public class StorageConfig {
 	
@@ -21,6 +24,9 @@ public class StorageConfig {
 	
 	@Value("${cloud.aws.region.static}")
 	private String region;
+	
+	@Value("${application.bucket.name}")
+	private String bucketName;
 	
 	@Bean
 	public AmazonS3 createS3Client() {
