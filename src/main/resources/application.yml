@@ -1,12 +1,5 @@
-cloud:
-  aws:
-    credentials:
-      access-key: AKIA4IAJDE2FCNVJR4I2
-      secret-key: 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
-    region:
-      static: eu-north-1
-    stack:
-      auto: false
+aws:
+  region: eu-north-1
       
 application:
   bucket:
