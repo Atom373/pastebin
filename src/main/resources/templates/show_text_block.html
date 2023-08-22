@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Pastebin</title>
+</head>
+<body>
+	<h2>Author: <span sec:authentication="principal.username">Username</span></h2>
+	<hr>
+	<p th:text="${text}">text</p>
+	<hr>
+</body>
+</html>
