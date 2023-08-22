@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.pastebin.entities.User;
+import com.example.pastebin.repositories.TextBlockRepo;
 import com.example.pastebin.services.AmazonS3ClientService;
 
 @Controller
 @RequestMapping("/")
 public class MainController {
 
-	private AmazonS3ClientService s3Client;
+	private TextBlockRepo textBlockRepo;
 	
-	public MainController(AmazonS3ClientService s3Client) {
-		this.s3Client = s3Client;
+	public MainController(TextBlockRepo textBlockRepo) {
+		this.textBlockRepo = textBlockRepo;
 	}
 	
 	@GetMapping
@@ -29,14 +30,10 @@ public class MainController {
 	
 	@PostMapping("/create")
 	public String createTextBlock(@RequestParam(name = "text") String text,
+								  @RequestParam(name = "lifetime") int lifetime,
 								  @AuthenticationPrincipal User user) {
-		String objectName = getObjectName(user.getUsername());
-		s3Client.putObject(objectName, text);
+		textBlockRepo.saveTextBlock(user, text, lifetime);
 		return "redirect:/";
 	}
 	
-	private String getObjectName(String username) {
-		Date currentDate = new Date();
-		return username + currentDate;
-	}
 }

@@ -32,5 +32,5 @@ public class MetaData { // represents meta data about objects in blob storage
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="user_details_id", nullable=false)
-	private User user;
+	private final User user;
 }
