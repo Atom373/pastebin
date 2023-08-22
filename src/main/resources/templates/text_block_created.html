@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Pastebin</title>
+</head>
+<body>
+	<h2>Your text was succesfully created!</h2>
+	<h3>You can share it using this
+	<a th:href="@{/get/{hashKey}(hashKey = ${hashKey})}" th:text="link">link</a>
+	</h3>
+</body>
+</html>

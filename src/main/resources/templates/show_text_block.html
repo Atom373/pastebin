@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Pastebin</title>
 </head>
 <body>
-	<h2>Author: <span sec:authentication="principal.username">Username</span></h2>
+	<h2>Author: <span th:text="${postDetails.authorName}">authorName</span></h2>
+	<p>Go back to <a th:href="@{/}" th:text="main">link</a> page</p>
 	<hr>
-	<p th:text="${text}">text</p>
+	<p th:text="${postDetails.text}">text</p>
 	<hr>
 </body>
 </html>

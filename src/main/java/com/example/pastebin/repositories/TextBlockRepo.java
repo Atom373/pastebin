@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.example.pastebin.entities.MetaData;
+import com.example.pastebin.entities.PostDetails;
 import com.example.pastebin.entities.User;
 import com.example.pastebin.services.AmazonS3ClientService;
 import com.example.pastebin.services.HashKeyService;
@@ -25,19 +26,25 @@ public class TextBlockRepo {
 		this.hashKeyService = hashKeyService;
 	}
 	
-	public String getTextBlockOrNull(String hashKey) {
+	public PostDetails getPostDetailsOrNull(String hashKey) {
 		Long id = hashKeyService.getIdFromHashKey(hashKey);
 		Optional<MetaData> metaData = metaDataRepo.findById(id);
 		if (metaData.isEmpty())
 			return null;
-		String objectName = metaData.get().getObjectName();
-		return s3Client.getObject(objectName);
+		return createPostDetails(metaData.get());
 	}
 	
-	public void saveTextBlock(User user, String text, int lifetime) {
+	private PostDetails createPostDetails(MetaData metaData) {
+		String objectName = metaData.getObjectName();
+		String username = metaData.getUser().getUsername();
+		return new PostDetails(s3Client.getObject(objectName), username);
+	}
+
+	public String saveTextBlock(User user, String text, int lifetime) {
 		String objectName = createObjectName(user.getUsername());
-		createMetaData(user, objectName, lifetime);
+		Long id = createMetaData(user, objectName, lifetime);
 		s3Client.putObject(objectName, text);
+		return hashKeyService.getHashKeyFromId(id);
 	}
 
 	private String createObjectName(String username) {
@@ -45,9 +52,10 @@ public class TextBlockRepo {
 		return username + ":" + currentDate;
 	}
 	
-	private void createMetaData(User user, String objectName, int lifetime) {
+	private Long createMetaData(User user, String objectName, int lifetime) {
 		MetaData meta = new MetaData(objectName, getExpirationDate(lifetime), user);
-		metaDataRepo.save(meta);
+		meta = metaDataRepo.save(meta);
+		return meta.getId();
 	}
 
 	private Date getExpirationDate(int lifetime) {

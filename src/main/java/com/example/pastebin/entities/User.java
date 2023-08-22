@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Table(name="user_details")
 @RequiredArgsConstructor
-@NoArgsConstructor(force=true, access=AccessLevel.PRIVATE)
+@NoArgsConstructor(force=true, access=AccessLevel.PROTECTED)
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
