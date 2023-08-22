@@ -42,7 +42,7 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy="user",
 			   fetch = FetchType.LAZY,
 			   cascade = CascadeType.ALL)
-	private Set<Blob> blobs;
+	private Set<MetaData> blobs;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

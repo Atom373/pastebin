@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @RequiredArgsConstructor
 @NoArgsConstructor(force=true, access=AccessLevel.PRIVATE)
-public class Blob { // represents meta data about objects in blob storage
+public class MetaData { // represents meta data about objects in blob storage
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
