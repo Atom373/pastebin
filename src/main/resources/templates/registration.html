@@ -4,14 +4,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Pastebin</title>
+<style>
+	.error {
+		color : red;
+	}
+</style>
 </head>
 <body>
 	<h3>Create an account</h3>
-	<form method="POST" th:action="@{/register}" id="registerForm">
-		<label>Username: <input type="text" name="username"></label><br/>
-		<label>email: <input type="email" name="email"></label><br/>
-		<label>password: <input type="password" name="password"></label><br/>
+	<form method="POST" th:action="@{/register}" th:object="${registrationForm}">
+		
+		<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error">username error</p>
+		<label>Username: <input type="text" th:field="*{username}"></label><br/>
+		
+		<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error">email error</p>
+		<label>email: <input type="email" th:field="*{email}"></label><br/>
+		
+		<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error">password error</p>
+		<label>password: <input type="password" th:field="*{password}"></label><br/>
+		
 		<input type="submit" value="register">
 	</form>
+	<!--<p>Already have an account? <a th:href="@{/login}">SignIn</a></p>-->
 </body>
 </html>

@@ -2,12 +2,16 @@ package com.example.pastebin.controllers;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.pastebin.repositories.UserRepo;
 import com.example.pastebin.security.RegistrationForm;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/register")
@@ -22,12 +26,16 @@ public class RegistrationController {
 	}
 	
 	@GetMapping
-	public String registerForm() {
+	public String registerForm(Model model) {
+		model.addAttribute("registrationForm", new RegistrationForm());
 		return "registration";
 	}
 	
 	@PostMapping
-	public String processRegistration(RegistrationForm form) {
+	public String processRegistration(@Valid RegistrationForm form, Errors errors) {
+		if (errors.hasErrors())
+			return "registration";
+		
 		userRepo.save(form.toUser(passwordEncoder));
 		return "redirect:/";
 	}
