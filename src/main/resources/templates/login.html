@@ -2,19 +2,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Pastebin</title>
-</head>
-<body>
-	<h1>Login</h1>
-	<div th:if="${param.error}">
-		Unable to login. Check your username and password.
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Pastebin</title>
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"></head>
+<body class="bg-light">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-4">
+				<h1>Sign in</h1>
+				<div th:if="${param.error}" class="text-danger">
+					Unable to login. Check your username and password.
+				</div>
+				<p>New here? Click
+				<a th:href="@{/register}">here</a> to register.</p>
+				<form method="POST" th:action="@{/login}">
+
+					<div class="mb-3">
+					    <label for="Email1Input" class="form-label">Email address</label>
+					    <input type="email" name="email" class="form-control" id="Email1Input">
+					</div>
+					  
+					<div class="mb-3">
+					    <label for="PasswordInput" class="form-label">Password</label>
+					    <input type="password" name="password" class="form-control" id="PasswordInput">
+					</div>
+					  
+					<button type="submit" class="btn btn-primary">Login</button>
+				</form>
+				
+			</div>
+		</div>
 	</div>
-	<p>New here? Click
-	<a th:href="@{/register}">here</a> to register.</p>
-	<form method="POST" th:action="@{/login}" id="loginForm">
-		<label>email: <input type="email" name="email"/></label><br/>
-		<label>Password: <input type="password" name="password"/></label><br/>
-		<input type="submit" value="Login"/>
-	</form>
 </body>
 </html>

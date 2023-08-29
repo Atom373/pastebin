@@ -2,25 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-<meta charset="UTF-8">
-<title>Pastebin</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Pastebin</title>
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
-<body>
-	<h2>Welcome to pastebin, <span sec:authentication="principal.username">Username</span>!</h2>
-	<form method="post" th:action="@{/create}">
-		<textarea placeholder="Create text block" name="text" cols="40" rows="10"></textarea>
-		<br>
-		<label>Select object lifetime
-			<select name="lifetime">
-				<option value="2">2 mins</option>
-				<option value="10">10 mins</option>
-				<option value="30">30 mins</option>
-				<option value="60">1 hour</option>
-				<option value="240">4 hours</option>
-			</select>
-		</label>
-		<br>
-		<input type="submit" value="create">		
-	</form>
+<body class="bg-light">
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-5">
+			<h2>Welcome to pastebin, <span sec:authentication="principal.username">Username</span>!</h2>
+			<form method="post" th:action="@{/create}">
+				<textarea placeholder="Create text block" class="form-control" name="text" cols="40" rows="10"></textarea>
+				
+				<label class="form-label mt-1">Select object lifetime</span>
+				<select name="lifetime" class="form-select mb-2" id="select">
+					<option value="2">2 minutes</option>
+					<option value="10">10 minutes</option>
+					<option value="30">30 minutes</option>
+					<option value="60">1 hour</option>
+					<option value="240">4 hours</option>
+				</select>
+				<button type="submit" class="btn btn-primary">Create</button>
+			</form>
+		</div>
+	</div>
+</div>
 </body>
 </html>

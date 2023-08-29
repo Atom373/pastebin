@@ -41,12 +41,11 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy="user",
 			   fetch = FetchType.LAZY,
 			   cascade = CascadeType.ALL)
-	private Set<MetaData> blobs;
+	private Set<MetaData> metaData;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		String role = username.equals("admin") ? "ROLE_ADMIN" : "ROLE_USER";
-		return Arrays.asList(new SimpleGrantedAuthority(role));
+		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
 	@Override
