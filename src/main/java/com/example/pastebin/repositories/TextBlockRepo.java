@@ -3,6 +3,8 @@ package com.example.pastebin.repositories;
 import java.util.Date;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import com.example.pastebin.entities.MetaData;
@@ -28,6 +30,11 @@ public class TextBlockRepo {
 	
 	public PostDetails getPostDetailsOrNull(String hashKey) {
 		Long id = hashKeyService.getIdFromHashKey(hashKey);
+		return getPostDetailsByIdOrNull(id);
+	}
+	
+	@Cacheable("PostDetails")
+	private PostDetails getPostDetailsByIdOrNull(Long id) {
 		Optional<MetaData> metaData = metaDataRepo.findById(id);
 		if (metaData.isEmpty())
 			return null;
@@ -62,6 +69,7 @@ public class TextBlockRepo {
 		return new Date(System.currentTimeMillis() + lifetime*60*1000);
 	}
 	
+	@CacheEvict("PostDetails")
 	public void deleteTextBlock(Long id) {
 		String objectName = metaDataRepo.findById(id).get().getObjectName();
 		metaDataRepo.deleteById(id);
