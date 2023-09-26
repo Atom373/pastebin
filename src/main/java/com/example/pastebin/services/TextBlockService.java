@@ -1,4 +1,4 @@
-package com.example.pastebin.repositories;
+package com.example.pastebin.services;
 
 import java.util.Date;
 import java.util.Optional;
@@ -6,21 +6,21 @@ import java.util.Optional;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.example.pastebin.entities.MetaData;
 import com.example.pastebin.entities.PostDetails;
 import com.example.pastebin.entities.User;
-import com.example.pastebin.services.AmazonS3ClientService;
-import com.example.pastebin.services.HashKeyService;
+import com.example.pastebin.repositories.MetaDataRepo;
 
-@Repository
-public class TextBlockRepo {
+@Service
+public class TextBlockService {
 
 	private AmazonS3ClientService s3Client;
 	private MetaDataRepo metaDataRepo;
 	private HashKeyService hashKeyService; 
 	
-	public TextBlockRepo(AmazonS3ClientService s3Client, 
+	public TextBlockService(AmazonS3ClientService s3Client, 
 						 MetaDataRepo metaDataRepo,
 						 HashKeyService hashKeyService) {
 		this.s3Client = s3Client;
@@ -28,13 +28,8 @@ public class TextBlockRepo {
 		this.hashKeyService = hashKeyService;
 	}
 	
-	public PostDetails getPostDetailsOrNull(String hashKey) {
-		Long id = hashKeyService.getIdFromHashKey(hashKey);
-		return getPostDetailsByIdOrNull(id);
-	}
-	
 	@Cacheable("PostDetails")
-	private PostDetails getPostDetailsByIdOrNull(Long id) {
+	public PostDetails getPostDetailsOrNull(Long id) {
 		Optional<MetaData> metaData = metaDataRepo.findById(id);
 		if (metaData.isEmpty())
 			return null;

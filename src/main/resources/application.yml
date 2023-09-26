@@ -10,6 +10,8 @@ interval: PT2M # ISO format
 spring:
   thymeleaf:
     cache: false
+  cache:
+    type: redis
   datasource:
     url: jdbc:postgresql://localhost:5432/pastebin
     username: postgres

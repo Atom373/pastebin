@@ -11,16 +11,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.pastebin.entities.PostDetails;
 import com.example.pastebin.entities.User;
-import com.example.pastebin.repositories.TextBlockRepo;
+import com.example.pastebin.services.HashKeyService;
+import com.example.pastebin.services.TextBlockService;
 
 @Controller
 @RequestMapping("/")
 public class MainController {
 
-	private TextBlockRepo textBlockRepo;
+	private TextBlockService textBlockService;
+	private HashKeyService hashKeyService;
 	
-	public MainController(TextBlockRepo textBlockRepo) {
-		this.textBlockRepo = textBlockRepo;
+	public MainController(TextBlockService textBlockService, HashKeyService hashKeyService) {
+		this.textBlockService = textBlockService;
+		this.hashKeyService = hashKeyService;
 	}
 	
 	@GetMapping
@@ -32,14 +35,15 @@ public class MainController {
 	public String createTextBlock(@RequestParam(name = "text") String text, Model model,
 								  @RequestParam(name = "lifetime") int lifetime,
 								  @AuthenticationPrincipal User user) {
-		String hash = textBlockRepo.saveTextBlock(user, text, lifetime);
+		String hash = textBlockService.saveTextBlock(user, text, lifetime);
 		model.addAttribute("hashKey", hash);
 		return "text_block_created";
 	}
 	
 	@GetMapping("/get/{hashKey}")
 	public String getTextBlock(@PathVariable String hashKey, Model model) {
-		PostDetails postDetails = textBlockRepo.getPostDetailsOrNull(hashKey);
+		Long id = hashKeyService.getIdFromHashKey(hashKey);
+		PostDetails postDetails = textBlockService.getPostDetailsOrNull(id);
 		if (postDetails == null)
 			return "error_page";
 		model.addAttribute("postDetails", postDetails);
