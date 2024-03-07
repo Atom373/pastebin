@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-	<meta charset="UTF-8">
+	<meta charset="UTF-8" lang="en-us">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Pastebin</title>
 	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
@@ -12,10 +12,10 @@
 	<div class="row justify-content-center">
 		<div class="col-5">
 			<h2>Welcome to pastebin, <span sec:authentication="principal.username">Username</span>!</h2>
-			<form method="post" th:action="@{/create}">
+			<form method="post" th:action="@{/create}" enctype="multipart/form-data">
 				<textarea placeholder="Create text block" class="form-control" name="text" cols="40" rows="10"></textarea>
 				
-				<label class="form-label mt-1">Select object lifetime</span>
+				<label class="form-label mt-1">Select its lifetime</span>
 				<select name="lifetime" class="form-select mb-2" id="select">
 					<option value="2">2 minutes</option>
 					<option value="10">10 minutes</option>
@@ -23,6 +23,12 @@
 					<option value="60">1 hour</option>
 					<option value="240">4 hours</option>
 				</select>
+				
+				<div class="mb-3">
+				  <label for="formFileMultiple" class="form-label">Attach files</label>
+				  <input class="form-control" type="file" id="formFileMultiple" name="files" multiple>
+				</div>
+				
 				<button type="submit" class="btn btn-primary">Create</button>
 			</form>
 		</div>

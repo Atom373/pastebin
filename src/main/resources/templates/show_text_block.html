@@ -7,10 +7,21 @@
 	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body class="bg-light">
-	<h2>Author: <span th:text="${postDetails.authorName}">authorName</span></h2>
-	<p>Go back to <a th:href="@{/}" th:text="main">link</a> page</p>
-	<hr>
-	<p th:text="${postDetails.text}">text</p>
-	<hr>
+	<div class="container justify-content-center"></div>
+		<h2>Author: <span th:text="${postDetails.authorName}">authorName</span></h2>
+		<p>Go back to <a th:href="@{/}" th:text="main">link</a> page</p>
+		<hr>
+		<p th:text="${postDetails.text}">text</p>
+		<hr>
+		
+		<div th:if="${postDetails.filenames != null and not #lists.isEmpty(postDetails.filenames)}">
+			<p>Attached files:</p>
+			<ul>
+		        <li th:each="filename : ${postDetails.filenames}">
+					<a th:href="@{'/download/' + ${filename}} " th:text="${#strings.arraySplit(filename, ':')[1]}"></a>
+				</li>
+		    </ul>
+	    </div>
+    </div>
 </body>
 </html>

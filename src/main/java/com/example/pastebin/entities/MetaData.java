@@ -1,7 +1,10 @@
 package com.example.pastebin.entities;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +21,9 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @RequiredArgsConstructor
 @NoArgsConstructor(force=true, access=AccessLevel.PRIVATE)
-public class MetaData { // represents meta data about objects in blob storage
+public class MetaData implements Serializable { // represents meta data about objects in blob storage
+
+	private static final long serialVersionUID = -4967133887662402044L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -26,6 +31,8 @@ public class MetaData { // represents meta data about objects in blob storage
 	
 	private final String objectName;
 	private final Date expirationDate;
+	@ElementCollection(fetch=FetchType.EAGER)
+	private final List<String> filenames;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="user_details_id", nullable=false)

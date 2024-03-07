@@ -13,7 +13,7 @@
 			<div class="col-4">
 				<h3>Create an account</h3>
 				
-				<form method="POST" th:action="@{/register}" th:object="${registrationForm}">
+				<form method="post" th:action="@{/register}" th:object="${registrationForm}">
 					
 				  <div class="mb-3">
 					<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></p>

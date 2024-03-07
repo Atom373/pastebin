@@ -1,6 +1,7 @@
 package com.example.pastebin.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class PostDetails implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private final String text;
 	private final String authorName;
+	private final List<String> filenames;
 }

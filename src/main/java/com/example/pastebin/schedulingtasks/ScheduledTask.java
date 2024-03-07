@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.pastebin.entities.MetaData;
 import com.example.pastebin.repositories.MetaDataRepo;
-import com.example.pastebin.services.TextBlockService;
+import com.example.pastebin.services.PostService;
 
 
 
@@ -16,12 +16,12 @@ import com.example.pastebin.services.TextBlockService;
 public class ScheduledTask {
 	
 	private MetaDataRepo metaDataRepo;
-	private TextBlockService textBlockService;
+	private PostService postService;
 	
 	public ScheduledTask(MetaDataRepo metaDataRepo,
-						 TextBlockService textBlockService) {
+						 PostService postService) {
 		this.metaDataRepo = metaDataRepo;
-		this.textBlockService = textBlockService;
+		this.postService = postService;
 	}
 	
 	@Scheduled(fixedDelayString = "${interval}")
@@ -29,7 +29,7 @@ public class ScheduledTask {
 		List<MetaData> outdatedPostsMeta = 
 				metaDataRepo.findAllByExpirationDateIsLessThan(new Date());
 		for (MetaData meta : outdatedPostsMeta) {
-			textBlockService.deleteTextBlock(meta.getId());
+			postService.deletePost(meta.getId());
 		}
 		System.out.println("was deleted: " + outdatedPostsMeta.size() + " posts");
 	}
