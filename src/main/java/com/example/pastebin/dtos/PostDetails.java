@@ -1,4 +1,4 @@
-package com.example.pastebin.entities;
+package com.example.pastebin.dtos;
 
 import java.io.Serializable;
 import java.util.List;

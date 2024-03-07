@@ -13,8 +13,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.pastebin.dtos.PostDetails;
+import com.example.pastebin.dtos.PostDto;
 import com.example.pastebin.entities.MetaData;
-import com.example.pastebin.entities.PostDetails;
 import com.example.pastebin.entities.User;
 import com.example.pastebin.exceptions.NoSuchPostException;
 import com.example.pastebin.repositories.MetaDataRepo;
@@ -29,9 +30,25 @@ public class PostService {
 	private MetaDataRepo metaDataRepo;
 	private HashKeyService hashKeyService; 
 	
+	public String savePost(PostDto postDto, User user) {
+		List<MultipartFile> files = postDto.getFiles();
+		String text = postDto.getText();
+		int lifetime = postDto.getLifetime();
+		
+		String postName = createPostName(user);
+		Long id = createMetaData(user, postName, files, lifetime);
+		s3Client.saveText(postName, text);
+		
+		if (files != null)
+			files.stream()
+					.filter( file -> !file.isEmpty() )
+					.forEach( file -> s3Client.saveFile(file, createFilename(file, user)) );
+		
+		return hashKeyService.getHashKeyFromId(id);
+	}
+	
 	@Cacheable("PostDetails")
-	public PostDetails getPostDetails(String hashKey) {
-		Long id = hashKeyService.getIdFromHashKey(hashKey);
+	public PostDetails getPostDetailsById(Long id) {
 		Optional<MetaData> metaData = metaDataRepo.findById(id);
 		if (metaData.isEmpty())
 			throw new NoSuchPostException();
@@ -49,45 +66,31 @@ public class PostService {
 	@CacheEvict("PostDetails")
 	public void deletePost(Long id) {
 		MetaData meta = metaDataRepo.findById(id).get();
-		String objectName = meta.getObjectName();
+		String postName = meta.getPostName();
 		meta.getFilenames().stream().forEach( filename -> s3Client.delete(filename));
 		metaDataRepo.deleteById(id);
-		s3Client.delete(objectName);
+		s3Client.delete(postName);
 	}
 	
 	private PostDetails createPostDetails(MetaData metaData) {
-		String objectName = metaData.getObjectName();
+		String postName = metaData.getPostName();
 		String username = metaData.getUser().getUsername();
 		List<String> filenames = metaData.getFilenames();
-		return new PostDetails(s3Client.getText(objectName), username, filenames);
-	}
-
-	public String savePost(User user, String text, 
-								List<MultipartFile> files, int lifetime) {
-		String objectName = createObjectName(user.getUsername());
-		Long id = createMetaData(user, objectName, files, lifetime);
-		s3Client.saveText(objectName, text);
-		
-		if (files != null)
-			files.stream()
-				.filter( file -> !file.isEmpty())
-				.forEach( file -> s3Client.saveFile(file, createFilename(file, user)));
-		
-		return hashKeyService.getHashKeyFromId(id);
+		return new PostDetails(s3Client.getText(postName), username, filenames);
 	}
 	
-	private Long createMetaData(User user, String objectName, 
+	private Long createMetaData(User user, String PostName, 
 								List<MultipartFile> files,int lifetime) {
 		List<String> filenames = files.stream()
 									.filter( file -> !file.isEmpty())
 									.map( 
 										file -> createFilename(file, user)
 									).collect(Collectors.toList());
-		MetaData meta = new MetaData(objectName, getExpirationDate(lifetime), filenames, user);
+		MetaData meta = new MetaData(PostName, getExpirationDate(lifetime), filenames, user);
 		meta = metaDataRepo.save(meta);
 		return meta.getId();
 	}
-
+	
 	private Date getExpirationDate(int lifetime) {
 		return new Date(System.currentTimeMillis() + lifetime*60*1000);
 	}
@@ -96,9 +99,9 @@ public class PostService {
 		return user.getUsername() + ":" + file.getOriginalFilename();
 	}
 
-	private String createObjectName(String username) {
+	private String createPostName(User user) {
 		Date currentDate = new Date();
-		return username + ":" + currentDate;
+		return user.getUsername() + ":" + currentDate;
 	}
 	
 }

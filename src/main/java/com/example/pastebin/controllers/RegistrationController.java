@@ -12,18 +12,15 @@ import com.example.pastebin.repositories.UserRepo;
 import com.example.pastebin.security.RegistrationForm;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("/register")
+@AllArgsConstructor
 public class RegistrationController {
 
 	private UserRepo userRepo;
 	private PasswordEncoder passwordEncoder;
-	
-	public RegistrationController(UserRepo userRepo, PasswordEncoder passwordEncoder) {
-		this.userRepo = userRepo;
-		this.passwordEncoder = passwordEncoder;
-	}
 	
 	@GetMapping
 	public String registerForm(Model model) {

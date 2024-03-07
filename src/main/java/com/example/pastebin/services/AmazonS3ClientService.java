@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -12,16 +13,13 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
+@RequiredArgsConstructor
 public class AmazonS3ClientService {
 	
 	@Value("${application.bucket.name}")
 	private String bucketName;
 	
-	private S3Client s3;
-	
-	public AmazonS3ClientService(S3Client s3) {
-		this.s3 = s3;
-	}
+	private final S3Client s3;
 	
 	public void saveText(String objectName, String text) {
 		PutObjectRequest putObjectRequest = PutObjectRequest.builder()

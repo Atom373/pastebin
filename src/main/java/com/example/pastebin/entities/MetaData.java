@@ -29,7 +29,7 @@ public class MetaData implements Serializable { // represents meta data about ob
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	private final String objectName;
+	private final String postName;
 	private final Date expirationDate;
 	@ElementCollection(fetch=FetchType.EAGER)
 	private final List<String> filenames;

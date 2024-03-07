@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class HashKeyService {
 	
-	private Encoder encoder = Base64.getEncoder();
-	private Decoder decoder = Base64.getDecoder();
+	private static Encoder encoder = Base64.getEncoder();
+	private static Decoder decoder = Base64.getDecoder();
 	
 	public String getHashKeyFromId(Long id) {
 		return encoder.encodeToString(String.valueOf(id).getBytes());

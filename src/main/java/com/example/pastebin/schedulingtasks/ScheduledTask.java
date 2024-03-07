@@ -10,19 +10,16 @@ import com.example.pastebin.entities.MetaData;
 import com.example.pastebin.repositories.MetaDataRepo;
 import com.example.pastebin.services.PostService;
 
+import lombok.AllArgsConstructor;
+
 
 
 @Component
+@AllArgsConstructor
 public class ScheduledTask {
 	
 	private MetaDataRepo metaDataRepo;
 	private PostService postService;
-	
-	public ScheduledTask(MetaDataRepo metaDataRepo,
-						 PostService postService) {
-		this.metaDataRepo = metaDataRepo;
-		this.postService = postService;
-	}
 	
 	@Scheduled(fixedDelayString = "${interval}")
 	public void deleteOutdatedPosts() {

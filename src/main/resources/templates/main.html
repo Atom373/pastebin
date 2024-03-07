@@ -12,11 +12,13 @@
 	<div class="row justify-content-center">
 		<div class="col-5">
 			<h2>Welcome to pastebin, <span sec:authentication="principal.username">Username</span>!</h2>
-			<form method="post" th:action="@{/create}" enctype="multipart/form-data">
-				<textarea placeholder="Create text block" class="form-control" name="text" cols="40" rows="10"></textarea>
+			<form method="post" th:action="@{/create}" th:object="${postDto}" enctype="multipart/form-data">
+
+				<p th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="text-danger"></p>
+				<textarea  th:field="*{text}" placeholder="Create text block" class="form-control" cols="40" rows="10"></textarea>
 				
-				<label class="form-label mt-1">Select its lifetime</span>
-				<select name="lifetime" class="form-select mb-2" id="select">
+				<label class="form-label mt-1">Select its lifetime</label>
+				<select th:field="*{lifetime}" class="form-select mb-2" id="select">
 					<option value="2">2 minutes</option>
 					<option value="10">10 minutes</option>
 					<option value="30">30 minutes</option>
@@ -26,7 +28,7 @@
 				
 				<div class="mb-3">
 				  <label for="formFileMultiple" class="form-label">Attach files</label>
-				  <input class="form-control" type="file" id="formFileMultiple" name="files" multiple>
+				  <input th:field="*{files}" class="form-control" type="file" id="formFileMultiple" multiple>
 				</div>
 				
 				<button type="submit" class="btn btn-primary">Create</button>

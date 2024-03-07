@@ -5,20 +5,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.example.pastebin.validators.UniqueValidator;
+import com.example.pastebin.validators.UniquenessValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy=UniqueValidator.class)
+@Constraint(validatedBy=UniquenessValidator.class)
 public @interface Unique {
 
-	String message();
-	
-	Class <?> [] groups() default {};
-	
-	Class <? extends Payload> [] content() default {};
+    String message();
+    
+    Class <?> [] groups() default {};
+    
+    Class <? extends Payload>[] payload() default {};
 }

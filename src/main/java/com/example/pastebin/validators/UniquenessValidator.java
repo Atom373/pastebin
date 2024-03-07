@@ -6,19 +6,17 @@ import com.example.pastebin.repositories.UserRepo;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class UniqueValidator implements ConstraintValidator<Unique, String>{
+public class UniquenessValidator implements ConstraintValidator<Unique, String>{
 
 	private UserRepo userRepo;
 	
-	public UniqueValidator(UserRepo userRepo) {
+	public UniquenessValidator(UserRepo userRepo) {
 		this.userRepo = userRepo;
 	}
 
 	@Override
 	public boolean isValid(String email, ConstraintValidatorContext context) {
-		if (email == null)
-			return false;
-		return userRepo.findByEmail(email) == null;
+		return ! userRepo.existsByEmail(email);
 	}
 
 }
