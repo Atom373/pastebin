@@ -35,10 +35,22 @@ public class AmazonS3ClientService {
 		s3.putObject(putObjectRequest, RequestBody.fromBytes(text.getBytes()));	
 	}
 	
-	public void saveFiles(List<MultipartFile> files, User user) {
+	public void saveFiles(List<MultipartFile> files, String authorName) {
 		files.stream()
 			.filter( file -> !file.isEmpty() )
-			.forEach( file -> saveFile(file, createFilename(file, user)) );
+			.forEach( file -> saveFile(file, createFilename(file, authorName)) );
+	}
+	
+	public void saveFile(MultipartFile file, String filename) {
+		PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(filename)
+                .build();
+		try {
+			s3.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}	
 	}
 	
 	public String getText(String postName) {
@@ -68,10 +80,10 @@ public class AmazonS3ClientService {
 	}
 	
 	public void deleteFilesByMeta(MetaData meta) {
-		meta.getFilenames().stream().forEach( filename -> deleteObject(filename));
+		meta.getFilenames().stream().forEach( filename -> deleteObjectByName(filename));
 	}
 	
-	public void deleteObject(String objectName) {
+	public void deleteObjectByName(String objectName) {
 		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(objectName)
@@ -80,19 +92,7 @@ public class AmazonS3ClientService {
         s3.deleteObject(deleteObjectRequest);
 	}
 	
-	private void saveFile(MultipartFile file, String filename) {
-		PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(filename)
-                .build();
-		try {
-			s3.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}	
-	}
-	
-	private String createFilename(MultipartFile file, User user) {
-		return user.getUsername() + ":" + file.getOriginalFilename();
+	public String createFilename(MultipartFile file, String authorName) {
+		return authorName + ":" + file.getOriginalFilename();
 	}
 }

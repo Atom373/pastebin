@@ -2,6 +2,9 @@ package com.example.pastebin.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,13 +55,13 @@ class AmazonS3ClientServiceTest {
 	
 	@Test
 	void deleteTextTest() {
-		s3ClientService.delete(objectName);
+		s3ClientService.deleteObjectByName(objectName);
 		
 		assertThrows(NoSuchKeyException.class, () -> s3ClientService.getText(objectName));
 	}
 	
 	@Test
-	void saveAndGetFileTest() {
+	void saveAndGetFileTest() throws Exception {
 		byte[] contentFromS3;
 		
 		s3ClientService.saveFile(multipartFile, filename);
@@ -69,7 +72,7 @@ class AmazonS3ClientServiceTest {
 	
 	@Test
 	void deleteFileTest() {
-		s3ClientService.delete(filename);
+		s3ClientService.deleteObjectByName(filename);
 		
 		assertThrows(NoSuchKeyException.class, () -> s3ClientService.getFileContent(filename));
 	}

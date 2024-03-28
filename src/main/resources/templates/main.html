@@ -31,6 +31,8 @@
 				  <input th:field="*{files}" class="form-control" type="file" id="formFileMultiple" multiple>
 				</div>
 				
+				<input th:field="*{authorName}" class="form-control" type="hidden" th:value="${username}">
+				
 				<button type="submit" class="btn btn-primary">Create</button>
 			</form>
 		</div>

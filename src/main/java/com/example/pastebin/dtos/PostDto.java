@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.pastebin.entities.User;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -16,5 +18,7 @@ public class PostDto {
 	private int lifetime;
 	
 	private List<MultipartFile> files;
+	
+	private String authorName;
 	
 }

@@ -38,11 +38,6 @@ public class User implements UserDetails {
 	private final String email;
 	private final String password;
 	
-	@OneToMany(mappedBy="user",
-			   fetch = FetchType.LAZY,
-			   cascade = CascadeType.ALL)
-	private Set<MetaData> metaData;
-	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));

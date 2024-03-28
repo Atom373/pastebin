@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class PostDetails implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
 	private final String text;
 	private final String authorName;
 	private final List<String> filenames;
