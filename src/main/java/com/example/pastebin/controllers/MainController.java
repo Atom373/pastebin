@@ -24,25 +24,25 @@ import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("/")
-@AllArgsConstructor
+@AllArgsConstructor 
 public class MainController {
 
 	private PostService postService;
 	private HashKeyService hashKeyService;
 	
 	@GetMapping
-	public String mainPage(Model model, @AuthenticationPrincipal User currentUser) {
+	public String mainPage(Model model) {
 		model.addAttribute("postDto", new PostDto());
-		model.addAttribute("username", currentUser.getUsername());
 		return "main";
 	}
 	
 	@PostMapping("/create")
-	public String createTextBlock(@Valid PostDto postDto, Errors errors, Model model) {
+	public String createTextBlock(@Valid PostDto postDto, Errors errors, 
+								  Model model, @AuthenticationPrincipal User currentUser) {
 		if (errors.hasErrors())
 			return "main";
 		
-		System.out.println("Current user is " + postDto.getAuthorName());
+		postDto.setAuthorName(currentUser.getUsername());
 		String hashKey = postService.savePost(postDto);
 		model.addAttribute("hashKey", hashKey);
 		return "text_block_created";
