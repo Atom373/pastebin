@@ -11,9 +11,10 @@ import com.example.pastebin.repositories.MetaDataRepo;
 import com.example.pastebin.services.PostService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
-
+@Slf4j
 @Component
 @AllArgsConstructor
 public class ScheduledTask {
@@ -28,7 +29,7 @@ public class ScheduledTask {
 		for (MetaData meta : outdatedPostsMeta) {
 			postService.deletePost(meta.getId());
 		}
-		System.out.println("was deleted: " + outdatedPostsMeta.size() + " posts");
+		log.info("Was deleted {} posts", outdatedPostsMeta.size());
 	}
 
 }
