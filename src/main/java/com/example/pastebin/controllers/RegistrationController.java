@@ -1,6 +1,9 @@
 package com.example.pastebin.controllers;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -8,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.pastebin.repositories.UserRepo;
 import com.example.pastebin.security.RegistrationForm;
+import com.example.pastebin.services.UserRegistrationService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,8 +22,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RegistrationController {
 
-	private UserRepo userRepo;
-	private PasswordEncoder passwordEncoder;
+	private UserRegistrationService userRegistrationService;
 	
 	@GetMapping
 	public String registerForm(Model model) {
@@ -33,7 +35,7 @@ public class RegistrationController {
 		if (errors.hasErrors())
 			return "registration";
 		
-		userRepo.save(form.toUser(passwordEncoder));
+		userRegistrationService.registerUser(form);
 		return "redirect:/";
 	}
 }

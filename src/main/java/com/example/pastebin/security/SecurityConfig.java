@@ -2,6 +2,8 @@ package com.example.pastebin.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +25,11 @@ public class SecurityConfig {
 	}
 	
 	@Bean
+	public AuthenticationManager configureAuthenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
+	
+	@Bean
 	public UserDetailsService userDetailsService(UserRepo repo) {
 		return email -> {
 			User user = repo.findByEmail(email);
@@ -36,17 +43,20 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 			.authorizeHttpRequests( requests -> requests
-				.requestMatchers("/").hasRole("USER")
+				.requestMatchers("/").authenticated()
 				.anyRequest().permitAll()
 			)
 			.formLogin( form -> form
 				.loginPage("/login")
-				.defaultSuccessUrl("/")
+				.defaultSuccessUrl("/", true)
 				.permitAll()
 				.usernameParameter("email")
 			)
 			.logout( logout -> logout
-				.permitAll()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/login")
+				.invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
 			)
 			.build();
 	}
