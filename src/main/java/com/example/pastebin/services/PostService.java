@@ -1,7 +1,9 @@
 package com.example.pastebin.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.pastebin.dtos.PostDetails;
 import com.example.pastebin.dtos.PostDto;
+import com.example.pastebin.dtos.ShortPostDetails;
 import com.example.pastebin.entities.MetaData;
 import com.example.pastebin.entities.User;
 
@@ -26,11 +29,11 @@ public class PostService {
 	private HashKeyService hashKeyService;
 	
 	public String savePost(PostDto postDto) {
-		String postName = createPostName(postDto.getAuthorName());
+		String postName = createPostName(postDto.getAuthor());
 		MetaData meta = metaDataService.createAndSaveMetaDataFor(postDto, postName);
 	
 		s3Client.saveText(postName, postDto.getText());
-		s3Client.saveFiles(postDto.getFiles(), postDto.getAuthorName());
+		s3Client.saveFiles(postDto.getFiles(), postDto.getAuthor());
 		
 		return hashKeyService.getHashKeyFromId(meta.getId());
 	}
@@ -41,6 +44,21 @@ public class PostService {
 		return createPostDetails(meta);
 	}
 	
+	public List<ShortPostDetails> getAllUserPosts(User user) {
+		return metaDataService
+				.getAllMetaByAuthor(user)
+				.stream()
+				.map( meta -> createShortPostDetails(meta))
+				.collect(Collectors.toList());
+	}
+	
+	private ShortPostDetails createShortPostDetails(MetaData meta) {
+		Date expirationDate = meta.getExpirationDate();
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+		String formattedExpirationDate = formatter.format(expirationDate);
+		return new ShortPostDetails(meta.getTitle(), formattedExpirationDate);
+	}
+
 	public Resource getFileResource(String filename) {
 		return new InputStreamResource(
 						new ByteArrayInputStream(
@@ -58,15 +76,16 @@ public class PostService {
 	}
 	
 	private PostDetails createPostDetails(MetaData metaData) {
+		String title = metaData.getTitle();
 		String postName = metaData.getPostName();
-		String authorName = metaData.getAuthorName();
+		String authorName = metaData.getAuthor().getUsername();
 		List<String> filenames = metaData.getFilenames();
-		return new PostDetails(s3Client.getText(postName), authorName, filenames);
+		return new PostDetails(title, s3Client.getText(postName), authorName, filenames);
 	}
 
-	private String createPostName(String authorName) {
+	private String createPostName(User author) {
 		Date currentDate = new Date();
-		return authorName + ":" + currentDate;
+		return author.getUsername() + ":" + currentDate;
 	}
 	
 }

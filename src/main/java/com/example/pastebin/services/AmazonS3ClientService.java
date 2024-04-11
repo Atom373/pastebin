@@ -35,10 +35,10 @@ public class AmazonS3ClientService {
 		s3.putObject(putObjectRequest, RequestBody.fromBytes(text.getBytes()));	
 	}
 	
-	public void saveFiles(List<MultipartFile> files, String authorName) {
+	public void saveFiles(List<MultipartFile> files, User author) {
 		files.stream()
 			.filter( file -> !file.isEmpty() )
-			.forEach( file -> saveFile(file, createFilename(file, authorName)) );
+			.forEach( file -> saveFile(file, createFilename(file, author.getUsername())) );
 	}
 	
 	public void saveFile(MultipartFile file, String filename) {

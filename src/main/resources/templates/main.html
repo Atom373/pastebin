@@ -19,8 +19,13 @@
 			</form>
 			<form method="post" th:action="@{/create}" th:object="${postDto}" enctype="multipart/form-data">
 
+				<div class="mb-3">
+					<p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></p>
+				    <input th:field="*{title}" class="form-control" type="text" placeholder="Title (not obligatory)">
+				</div>
+				
 				<p th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="text-danger"></p>
-				<textarea  th:field="*{text}" placeholder="Create text block" class="form-control" cols="40" rows="10"></textarea>
+				<textarea  th:field="*{text}" placeholder="Create text block" class="form-control" cols="40" rows="8"></textarea>
 				
 				<label class="form-label mt-1">Select its lifetime</label>
 				<select th:field="*{lifetime}" class="form-select mb-2" id="select">
@@ -36,10 +41,16 @@
 				  <input th:field="*{files}" class="form-control" type="file" id="formFileMultiple" multiple>
 				</div>
 				
-				<!--<input type="hidden" th:field="*{authorName}" th:value="${authorName}" />-->
-				
 				<button type="submit" class="btn btn-primary">Create</button>
 			</form>
+			<hr>
+			<div th:if="${activePosts != null and not #lists.isEmpty(activePosts)}">
+			    <p>Active posts:</p>
+			    <div th:each="post : ${activePosts}" class="mb-3">
+			        <h6>Title: <span th:text="${post.title}"></span></h6>
+					 Will be deleted at: <span th:text="${post.formattedExpirationDate}"></span>
+			    </div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -25,7 +25,7 @@ public class ScheduledTask {
 	@Scheduled(fixedDelayString = "${interval}")
 	public void deleteOutdatedPosts() {
 		List<MetaData> outdatedPostsMeta = 
-				metaDataRepo.findAllByExpirationDateIsLessThan(new Date());
+				metaDataRepo.getAllByExpirationDateIsLessThan(new Date());
 		for (MetaData meta : outdatedPostsMeta) {
 			postService.deletePost(meta.getId());
 		}

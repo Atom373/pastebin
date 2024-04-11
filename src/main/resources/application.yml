@@ -5,7 +5,7 @@ application:
   bucket:
     name: pastebin44
 
-interval: PT2M # ISO format
+interval: PT1M # ISO format
       
 spring:
   thymeleaf:

@@ -10,7 +10,8 @@
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-6">
-				<h2>Author: <span th:text="${postDetails.authorName}">authorName</span></h2>
+				<h2>Title: <span th:text="${postDetails.title}">title</span></h2>
+				<h4>Author: <span th:text="${postDetails.authorName}">authorName</span></h4>
 				<p>Go back to <a th:href="@{/}" th:text="main">link</a> page</p>
 				<hr>
 				<p th:text="${postDetails.text}">text</p>

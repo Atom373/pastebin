@@ -1,5 +1,7 @@
 package com.example.pastebin.controllers;
 
+import java.util.List;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.pastebin.dtos.PostDetails;
 import com.example.pastebin.dtos.PostDto;
+import com.example.pastebin.dtos.ShortPostDetails;
 import com.example.pastebin.entities.User;
 import com.example.pastebin.services.HashKeyService;
 import com.example.pastebin.services.PostService;
@@ -31,8 +34,10 @@ public class MainController {
 	private HashKeyService hashKeyService;
 	
 	@GetMapping
-	public String mainPage(Model model) {
+	public String mainPage(Model model, @AuthenticationPrincipal User currentUser) {
 		model.addAttribute("postDto", new PostDto());
+		List<ShortPostDetails> activePosts = postService.getAllUserPosts(currentUser);
+		model.addAttribute("activePosts", activePosts);
 		return "main";
 	}
 	
@@ -42,7 +47,7 @@ public class MainController {
 		if (errors.hasErrors())
 			return "main";
 		
-		postDto.setAuthorName(currentUser.getUsername());
+		postDto.setAuthor(currentUser);
 		String hashKey = postService.savePost(postDto);
 		model.addAttribute("hashKey", hashKey);
 		return "text_block_created";

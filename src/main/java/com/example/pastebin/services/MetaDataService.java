@@ -1,5 +1,8 @@
 package com.example.pastebin.services;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,10 +27,11 @@ public class MetaDataService {
 	
 	public MetaData createAndSaveMetaDataFor(PostDto postDto, String postName) {
 		int lifetime = postDto.getLifetime();
-		String authorName = postDto.getAuthorName();
+		User author = postDto.getAuthor();
+		String title = getTitleOrDefault(postDto);
 		
-		List<String> filenames = getFilenames(postDto.getFiles(), authorName);
-		MetaData meta = new MetaData(postName, getExpirationDate(lifetime), authorName, filenames);
+		List<String> filenames = getFilenames(postDto.getFiles(), author);
+		MetaData meta = new MetaData(title, postName, getExpirationDate(lifetime), author, filenames);
 		metaDataRepo.save(meta);
 		return meta;
 	}
@@ -38,17 +42,29 @@ public class MetaDataService {
 				.orElseThrow(() -> new NoSuchPostException());
 	}
 	
+	public List<MetaData> getAllMetaByAuthor(User user) {
+		return metaDataRepo.getAllByAuthor(user);
+	}
+	
 	public MetaData deleteMetaById(long id) {
 		MetaData meta = metaDataRepo.findById(id).get();
 		metaDataRepo.delete(meta);
 		return meta;
 	}
 	
-	private List<String> getFilenames(List<MultipartFile> files, String authorName) {
+	private List<String> getFilenames(List<MultipartFile> files, User author) {
 		return files.stream()
 				.filter( file -> !file.isEmpty())
-				.map( file -> s3Client.createFilename(file, authorName) )
+				.map( file -> s3Client.createFilename(file, author.getUsername()) )
 				.collect(Collectors.toList());
+	}
+	
+	private String getTitleOrDefault(PostDto postDto) {
+		if (postDto.getTitle().length() > 0)
+			return postDto.getTitle();
+		Date expirationDate = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+		return formatter.format(expirationDate);
 	}
 	
 	private Date getExpirationDate(int lifetime) {

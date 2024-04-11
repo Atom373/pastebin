@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,9 +28,12 @@ public class MetaData implements Serializable { // represents meta data about ob
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
+	private final String title;
 	private final String postName;
 	private final Date expirationDate;
-	private final String authorName;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private final User author;
 	
 	@ElementCollection(fetch=FetchType.EAGER)
 	private final List<String> filenames;
