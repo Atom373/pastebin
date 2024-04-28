@@ -11,8 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.pastebin.dtos.RegistrationForm;
 import com.example.pastebin.repositories.UserRepo;
-import com.example.pastebin.security.RegistrationForm;
 
 import lombok.AllArgsConstructor;
 

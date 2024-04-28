@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.pastebin.security.RegistrationForm;
+import com.example.pastebin.dtos.RegistrationForm;
 import com.example.pastebin.services.UserRegistrationService;
 
 import jakarta.validation.Valid;

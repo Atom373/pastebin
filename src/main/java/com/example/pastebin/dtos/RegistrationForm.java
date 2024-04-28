@@ -1,4 +1,4 @@
-package com.example.pastebin.security;
+package com.example.pastebin.dtos;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -7,6 +7,7 @@ import com.example.pastebin.entities.User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -20,7 +21,7 @@ public class RegistrationForm {
 	@Unique(message = "This email is already in use")
 	private String email;
 	
-	@NotBlank(message = "password field can not be blank")
+	@Size(min=4, message="password must be at least 4 characters long")
 	private String password;
 	
 	public User toUser(PasswordEncoder encoder) {

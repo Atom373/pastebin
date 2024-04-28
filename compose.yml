@@ -1,0 +1,33 @@
+version: "0.0.1"
+
+services:
+  app:
+    image: pastebin
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      AWS_SHARED_CREDENTIALS_FILE: /app/credentials
+      AWS_CONFIG_FILE: /app/config
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pastebin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+      
+volumes:
+  postgres_data:

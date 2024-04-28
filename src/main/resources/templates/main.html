@@ -12,11 +12,13 @@
 	<div class="row justify-content-center">
 		<div class="col-5">
 			<h2>Welcome to pastebin, <span sec:authentication="principal.username">Username</span>!</h2>
+			
 			<form method="post" th:action="@{/logout}">
 				<h6>If you want to log out, click 
 					<button type="submit" class="btn btn-link p-0 m-0 align-baseline">here</button>
 				</h6>
 			</form>
+			
 			<form method="post" th:action="@{/create}" th:object="${postDto}" enctype="multipart/form-data">
 
 				<div class="mb-3">
@@ -46,10 +48,12 @@
 			<hr>
 			<div th:if="${activePosts != null and not #lists.isEmpty(activePosts)}">
 			    <p>Active posts:</p>
+				
 			    <div th:each="post : ${activePosts}" class="mb-3">
 			        <h6>Title: <span th:text="${post.title}"></span></h6>
 					 Will be deleted at: <span th:text="${post.formattedExpirationDate}"></span>
 			    </div>
+				
 			</div>
 		</div>
 	</div>

@@ -22,7 +22,7 @@ spring:
       ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
     properties:
       hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: always
