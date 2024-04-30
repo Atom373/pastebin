@@ -15,9 +15,6 @@ public class StorageConfig {
 	@Value("${aws.region}")
 	private String region;
 	
-	@Value("${application.bucket.name}")
-	private String bucketName;
-	
 	@Bean
 	public S3Client createS3Client() {
 		return S3Client.builder()

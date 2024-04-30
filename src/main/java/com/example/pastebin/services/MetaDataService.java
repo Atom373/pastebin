@@ -1,8 +1,5 @@
 package com.example.pastebin.services;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,9 +59,7 @@ public class MetaDataService {
 	private String getTitleOrDefault(PostDto postDto) {
 		if (postDto.getTitle().length() > 0)
 			return postDto.getTitle();
-		Date expirationDate = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
-		return formatter.format(expirationDate);
+		return DateTimeService.getFormattedCurrentDate();
 	}
 	
 	private Date getExpirationDate(int lifetime) {

@@ -51,20 +51,13 @@ public class PostService {
 				.map( meta -> createShortPostDetails(meta))
 				.collect(Collectors.toList());
 	}
-	
-	private ShortPostDetails createShortPostDetails(MetaData meta) {
-		Date expirationDate = meta.getExpirationDate();
-		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
-		String formattedExpirationDate = formatter.format(expirationDate);
-		return new ShortPostDetails(meta.getTitle(), formattedExpirationDate);
-	}
 
 	public Resource getFileResource(String filename) {
 		return new InputStreamResource(
 						new ByteArrayInputStream(
 								s3Client.getFileContent(filename)
 						)
-					);
+				);
 	}
 	
 	@CacheEvict("PostDetails")
@@ -83,6 +76,12 @@ public class PostService {
 		return new PostDetails(title, s3Client.getText(postName), authorName, filenames);
 	}
 
+	private ShortPostDetails createShortPostDetails(MetaData meta) {
+		Date expirationDate = meta.getExpirationDate();
+		String formattedExpirationDate = DateTimeService.formatDate(expirationDate);
+		return new ShortPostDetails(meta.getTitle(), formattedExpirationDate);
+	}
+	
 	private String createPostName(User author) {
 		Date currentDate = new Date();
 		return author.getUsername() + ":" + currentDate;
