@@ -58,7 +58,7 @@ public class MetaDataService {
 	
 	private String getTitleOrDefault(PostDto postDto) {
 		if (postDto.getTitle().length() > 0)
-			return postDto.getTitle();
+			return postDto.getTitle().trim();
 		return DateTimeService.getFormattedCurrentDate();
 	}
 	

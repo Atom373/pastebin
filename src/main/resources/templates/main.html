@@ -18,33 +18,61 @@
 					<button type="submit" class="btn btn-link p-0 m-0 align-baseline">here</button>
 				</h6>
 			</form>
-			
-			<form method="post" th:action="@{/create}" th:object="${postDto}" enctype="multipart/form-data">
-
-				<div class="mb-3">
-					<p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></p>
-				    <input th:field="*{title}" class="form-control" type="text" placeholder="Title (not obligatory)">
-				</div>
+		</div>
+	</div>
+	
+	<form method="post" th:object="${postDto}" enctype="multipart/form-data" id="postForm">
+		<div class="row justify-content-center">
+			<div class="col-5">
+				<label style="display: none" class="text-danger" id="titleErrorLabel">
+					The length of the title should not exceed 50 characters
+				</label>
+			    <input th:field="*{title}" class="form-control mb-1" type="text" placeholder="Title (not obligatory)">
 				
-				<p th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="text-danger"></p>
-				<textarea  th:field="*{text}" placeholder="Create text block" class="form-control" cols="40" rows="8"></textarea>
+				<label style="display: none" class="text-danger" id="textBlockErrorLabel">
+					You Can not save an empty text block!
+				</label>
+				<textarea  th:field="*{text}" placeholder="Create text block" class="form-control mb-3 mt-2" cols="40" rows="8"></textarea>
 				
-				<label class="form-label mt-1">Select its lifetime</label>
-				<select th:field="*{lifetime}" class="form-select mb-2" id="select">
+			</div>
+		</div>
+		
+		<div class="row justify-content-center mb-3">
+			<div class="col-2">
+				<label for="formFileMultiple" class="form-label">Attach files:</label>
+			</div>
+			<div class="col-3">
+				<input th:field="*{files}" class="form-control" type="file" id="formFileMultiple" multiple>
+			</div>
+		</div>
+		
+		<div class="row justify-content-center mb-3">
+			<div class="col-2">
+				<label class="form-label" for="select">Select its lifetime:</label>
+			</div>
+			<div class="col-3">
+				<select th:field="*{lifetime}" class="form-select" id="select">
 					<option value="2">2 minutes</option>
 					<option value="10">10 minutes</option>
 					<option value="30">30 minutes</option>
 					<option value="60">1 hour</option>
 					<option value="240">4 hours</option>
 				</select>
+			</div>
+		</div>
 				
-				<div class="mb-3">
-				  <label for="formFileMultiple" class="form-label">Attach files</label>
-				  <input th:field="*{files}" class="form-control" type="file" id="formFileMultiple" multiple>
-				</div>
-				
+		<div class="row justify-content-center">
+			<div class="col-2">
 				<button type="submit" class="btn btn-primary">Create</button>
-			</form>
+			</div>
+			<div class="col-3">
+				<div id="downloading"></div>
+			</div>
+		</div>
+	</form>
+	
+	<div class="row justify-content-center">
+		<div class="col-5">
 			<hr>
 			<div th:if="${activePosts != null and not #lists.isEmpty(activePosts)}">
 			    <p>Active posts:</p>
@@ -53,10 +81,11 @@
 			        <h6>Title: <span th:text="${post.title}"></span></h6>
 					 Will be deleted at: <span th:text="${post.formattedExpirationDate}"></span>
 			    </div>
-				
 			</div>
 		</div>
 	</div>
 </div>
+
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

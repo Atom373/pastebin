@@ -3,7 +3,6 @@ package com.example.pastebin.services;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.io.ByteArrayInputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,7 +31,7 @@ public class PostService {
 		String postName = createPostName(postDto.getAuthor());
 		MetaData meta = metaDataService.createAndSaveMetaDataFor(postDto, postName);
 	
-		s3Client.saveText(postName, postDto.getText());
+		s3Client.saveText(postName, postDto.getText().trim());
 		s3Client.saveFiles(postDto.getFiles(), postDto.getAuthor());
 		
 		return hashKeyService.getHashKeyFromId(meta.getId());

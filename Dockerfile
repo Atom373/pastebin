@@ -12,6 +12,8 @@ FROM openjdk:17-slim
 
 WORKDIR /app
 
+ENV APP_SERVER_URL=http://app
+
 COPY --from=build /app/target/*.jar application.jar
 
 COPY credentials /app/
