@@ -11,44 +11,47 @@
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-4">
-				<h3>Create an account</h3>
-				
-				<form method="post" th:action="@{/register}" th:object="${registrationForm}">
+				<div class="shadow-lg p-4 mt-3 bg-light rounded">
+			
+					<h2 class="mb-3">Create an account</h2>
 					
-					 <div th:unless="${#fields.hasErrors('username')}" class="form-floating mb-3" >
-					 	<input type="text" th:field="*{username}" class="form-control" id="NameInput" placeholder="username">
-					 	<label for="NameInput">Name</label>
-					 </div>
-					 
-					 <div th:if="${#fields.hasErrors('username')}" class="form-floating mb-3">
-					 	<input type="text" th:field="*{username}" class="form-control is-invalid" id="InvalidNameInput" placeholder="username">
-					 	<label for="InvalidNameInput" th:errors="*{username}">Invalid Name</label>
-					 </div>
+					<form method="post" th:action="@{/register}" th:object="${registrationForm}">
+						
+						 <div th:unless="${#fields.hasErrors('username')}" class="form-floating mb-3" >
+						 	<input type="text" th:field="*{username}" class="form-control" id="NameInput" placeholder="username">
+						 	<label for="NameInput">Name</label>
+						 </div>
+						 
+						 <div th:if="${#fields.hasErrors('username')}" class="form-floating mb-3">
+						 	<input type="text" th:field="*{username}" class="form-control is-invalid" id="InvalidNameInput" placeholder="username">
+						 	<label for="InvalidNameInput" th:errors="*{username}">Invalid Name</label>
+						 </div>
+						
+						 <div th:unless="${#fields.hasErrors('email')}" class="form-floating mb-3">
+						 	<input type="email" th:field="*{email}" class="form-control" id="Email1Input" placeholder="email">
+						 	<label for="Email1Input">Email</label>
+						 </div>
+						 
+						 <div th:if="${#fields.hasErrors('email')}" class="form-floating mb-3">
+						 	<input type="email" th:field="*{email}" class="form-control is-invalid" id="InvalidEmailInput" placeholder="email">
+						 	<label for="InvalidEmailInput" th:errors="*{email}">Invalid Email</label>
+						 </div>
+						 
+						 <div th:unless="${#fields.hasErrors('password')}" class="form-floating mb-3">
+						 	<input type="password" th:field="*{password}" class="form-control" id="PasswordInput" placeholder="password">
+						 	<label for="PasswordInput">Password</label>
+						 </div>
+						 
+						 <div th:if="${#fields.hasErrors('password')}" class="form-floating mb-3">
+						 	<input type="password" th:field="*{password}" class="form-control is-invalid" id="InvalidPasswordInput" placeholder="password">
+						 	<label for="InvalidPasswordInput" th:errors="*{password}">Invalid Password</label>
+						 </div>
+						 
+						 <button type="submit" class="btn btn-primary mb-3">Register</button>
+					</form>
 					
-					 <div th:unless="${#fields.hasErrors('email')}" class="form-floating mb-3">
-					 	<input type="email" th:field="*{email}" class="form-control" id="Email1Input" placeholder="email">
-					 	<label for="Email1Input">Email</label>
-					 </div>
-					 
-					 <div th:if="${#fields.hasErrors('email')}" class="form-floating mb-3">
-					 	<input type="email" th:field="*{email}" class="form-control is-invalid" id="InvalidEmailInput" placeholder="email">
-					 	<label for="InvalidEmailInput" th:errors="*{email}">Invalid Email</label>
-					 </div>
-					 
-					 <div th:unless="${#fields.hasErrors('password')}" class="form-floating mb-3">
-					 	<input type="password" th:field="*{password}" class="form-control" id="PasswordInput" placeholder="password">
-					 	<label for="PasswordInput">Password</label>
-					 </div>
-					 
-					 <div th:if="${#fields.hasErrors('password')}" class="form-floating mb-3">
-					 	<input type="password" th:field="*{password}" class="form-control is-invalid" id="InvalidPasswordInput" placeholder="password">
-					 	<label for="InvalidPasswordInput" th:errors="*{password}">Invalid Password</label>
-					 </div>
-					 
-					 <button type="submit" class="btn btn-primary mb-3">Register</button>
-				</form>
-				
-				<p>Already have an account? <a th:href="@{/login}">Sign in</a></p>
+					<p>Already have an account? <a th:href="@{/login}">Sign in</a></p>
+				</div>
 			</div>
 		</div>
 	</div>

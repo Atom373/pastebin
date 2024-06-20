@@ -13,7 +13,7 @@ services:
       AWS_SHARED_CREDENTIALS_FILE: /app/credentials
       AWS_CONFIG_FILE: /app/config
   postgres:
-    image: postgres:latest
+    image: postgres:16-alpine
     container_name: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -24,7 +24,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
   redis:
-    image: redis:latest
+    image: redis:alpine
     container_name: redis
     ports:
       - "6379:6379"
