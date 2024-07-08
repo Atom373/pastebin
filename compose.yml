@@ -5,14 +5,15 @@ services:
     image: pastebin
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres
+    depends_on: 
+      - postgresql
       - redis
     environment:
       SPRING_PROFILES_ACTIVE: prod
       AWS_SHARED_CREDENTIALS_FILE: /app/credentials
-      AWS_CONFIG_FILE: /app/config
-  postgres:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+  postgresql:
     image: postgres:16-alpine
     container_name: postgresql
     volumes:
