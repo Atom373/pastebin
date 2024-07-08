@@ -14,7 +14,7 @@ services:
       AWS_CONFIG_FILE: /app/config
   postgres:
     image: postgres:16-alpine
-    container_name: postgres
+    container_name: postgresql
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
