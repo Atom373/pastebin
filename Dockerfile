@@ -18,8 +18,6 @@ ENV APP_SERVER_URL=http://app
 
 COPY --from=build /app/target/*.jar application.jar
 
-COPY credentials /app/
-
 COPY config /app/
 
 EXPOSE 8080
